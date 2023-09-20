@@ -1,4 +1,12 @@
-import { Box, Chip, Container, IconButton, Paper, Stack } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Container,
+  IconButton,
+  Paper,
+  Stack,
+  useMediaQuery,
+} from "@mui/material";
 import {
   selectIsConnectedToRoom,
   selectIsLocalAudioEnabled,
@@ -28,6 +36,8 @@ export default function RoomPage() {
 
   const navigate = useNavigate();
 
+  const isDesktop = useMediaQuery("(min-width: 800px)");
+
   useEffect(() => {
     if (!isConnected) {
       navigate("/");
@@ -52,10 +62,18 @@ export default function RoomPage() {
         <Chip variant="outlined" label="Connected" color="success" />
         <Paper>
           <Stack direction="row">
-            <IconButton aria-label="mute" onClick={handleToggleAudio}>
+            <IconButton
+              aria-label="mute"
+              onClick={handleToggleAudio}
+              color={audioEnabled ? "default" : "error"}
+            >
               {audioEnabled ? <MicIcon /> : <MicOffIcon />}
             </IconButton>
-            <IconButton aria-label="video toggle" onClick={handleToggleVideo}>
+            <IconButton
+              aria-label="video toggle"
+              onClick={handleToggleVideo}
+              color={videoEnabled ? "default" : "error"}
+            >
               {videoEnabled ? <VideocamIcon /> : <VideocamOffIcon />}
             </IconButton>
             <IconButton
@@ -69,13 +87,25 @@ export default function RoomPage() {
           </Stack>
         </Paper>
 
-        <Stack display={"flex"} height={"80vh"} spacing={2}>
-          {peers.map((peer) => {
-            if (peer.isLocal) {
-              return <Peer key={peer.id} peer={peer} />;
-            }
-          })}
-          <Box sx={{ maxHeight: "100%" }} overflow={"scroll"}>
+        <Stack
+          display={"flex"}
+          height={"80vh"}
+          direction={isDesktop ? "row" : "column"}
+          spacing={2}
+        >
+          <Box flex={1}>
+            {peers.map((peer) => {
+              if (peer.isLocal) {
+                return <Peer key={peer.id} peer={peer} />;
+              }
+            })}
+          </Box>
+
+          <Box
+            sx={{ maxHeight: "100%", flex: 2 }}
+            overflow={"scroll"}
+            margin={peers.length > 1 ? "1rem" : "0 !important"}
+          >
             <Stack overflow={"scroll"} spacing={2}>
               {peers.map((peer) => {
                 if (!peer.isLocal) {

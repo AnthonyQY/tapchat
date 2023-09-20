@@ -1,0 +1,4 @@
+@font-face {
+  font-family: "coolvetica";
+  src: local("coolvetica"), url(./coolvetica.otf) format("opentype");
+}

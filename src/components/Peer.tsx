@@ -10,6 +10,8 @@ function Peer({ peer }: { peer: any }) {
       sx={{
         borderTopLeftRadius: "0.5rem",
         borderTopRightRadius: "0.5rem",
+        height: "fit-content",
+        width: "100%",
       }}
     >
       <Stack>
@@ -28,7 +30,11 @@ function Peer({ peer }: { peer: any }) {
             playsInline
           />
         </Box>
-        <Typography variant="subtitle1" marginLeft={"1rem"}>
+        <Typography
+          variant="subtitle1"
+          marginLeft={"1rem"}
+          color={peer.isLocal ? "lightgreen" : "white"}
+        >
           {peer.name} {peer.isLocal ? "(You)" : ""}
         </Typography>
       </Stack>
