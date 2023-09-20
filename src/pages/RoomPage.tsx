@@ -27,6 +27,7 @@ import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useSnackbar } from "notistack";
+import ChatWidget from "../components/ChatWidget";
 
 export default function RoomPage() {
   const hmsActions = useHMSActions();
@@ -80,10 +81,10 @@ export default function RoomPage() {
         showSnack(`${notification.data.name} left`, "error");
         break;
       case HMSNotificationTypes.NEW_MESSAGE:
-        showSnack(
+        /**showSnack(
           `${notification.data.message} received from ${notification.data.senderName}`,
           "info"
-        );
+        );**/
         break;
       case HMSNotificationTypes.ERROR:
         showSnack(`Error code: ${notification.data.code}`, "error");
@@ -108,7 +109,7 @@ export default function RoomPage() {
   return (
     <>
       <Container sx={{ height: "100%", paddingTop: "1rem" }}>
-        <Stack spacing={2}>
+        <Stack spacing={2} height={"80vh"}>
           <Chip variant="outlined" label="Connected" color="success" />
           <Paper>
             <Stack direction="row">
@@ -143,13 +144,19 @@ export default function RoomPage() {
             direction={isDesktop ? "row" : "column"}
             spacing={2}
           >
-            <Box flex={1}>
+            <Stack
+              flex={1}
+              height={isDesktop ? "80vh" : "80vh"}
+              maxHeight={"80vh"}
+              spacing={1}
+            >
               {peers.map((peer) => {
                 if (peer.isLocal) {
                   return <Peer key={peer.id} peer={peer} />;
                 }
               })}
-            </Box>
+              {isDesktop ? <ChatWidget /> : null}
+            </Stack>
 
             <Box
               sx={{ maxHeight: "100%" }}
@@ -157,14 +164,18 @@ export default function RoomPage() {
               margin={peers.length > 1 ? "1rem" : "0 !important"}
               flex={peers.length > 1 ? 2 : 0}
             >
-              <Stack overflow={"scroll"} spacing={2}>
-                {peers.map((peer) => {
-                  if (!peer.isLocal) {
-                    return <Peer key={peer.id} peer={peer} />;
-                  }
-                })}
+              <Stack>
+                <Stack overflow={"scroll"} spacing={2}>
+                  {peers.map((peer) => {
+                    if (!peer.isLocal) {
+                      return <Peer key={peer.id} peer={peer} />;
+                    }
+                  })}
+                </Stack>
               </Stack>
             </Box>
+
+            {isDesktop ? null : <ChatWidget />}
           </Stack>
         </Stack>
       </Container>

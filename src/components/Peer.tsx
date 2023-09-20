@@ -1,5 +1,7 @@
 import {
   selectConnectionQualityByPeerID,
+  selectIsPeerAudioEnabled,
+  selectIsPeerVideoEnabled,
   selectPeerAudioByID,
   useHMSStore,
   useVideo,
@@ -13,6 +15,10 @@ import SignalCellularConnectedNoInternet0BarIcon from "@mui/icons-material/Signa
 import SignalCellular0BarIcon from "@mui/icons-material/SignalCellular0Bar";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
+import VideocamOffIcon from "@mui/icons-material/VideocamOff";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import MicIcon from "@mui/icons-material/Mic";
+import MicOffIcon from "@mui/icons-material/MicOff";
 
 function Peer({ peer }: { peer: any }) {
   const downlinkQuality = useHMSStore(
@@ -20,6 +26,8 @@ function Peer({ peer }: { peer: any }) {
   )?.downlinkQuality;
 
   const peerAudioLevel = useHMSStore(selectPeerAudioByID(peer.id));
+  const audioOn = useHMSStore(selectIsPeerAudioEnabled(peer.id));
+  const videoOn = useHMSStore(selectIsPeerVideoEnabled(peer.id));
 
   const { videoRef } = useVideo({
     trackId: peer.videoTrack,
@@ -81,7 +89,10 @@ function Peer({ peer }: { peer: any }) {
             >
               {peer.name} {peer.isLocal ? "(You)" : ""}
             </Typography>
-            <Box marginLeft={"auto"}>
+            <Stack direction={"row"} marginLeft={"auto"}>
+              {audioOn ? <MicIcon /> : <MicOffIcon color="error" />}
+              {videoOn ? <VideocamIcon /> : <VideocamOffIcon color="error" />}
+
               {downlinkQuality == -1 ? (
                 <SignalCellular0BarIcon color="primary" />
               ) : null}
@@ -99,7 +110,7 @@ function Peer({ peer }: { peer: any }) {
                   <SignalCellularAltIcon color="success" />
                 ) : null
               ) : null}
-            </Box>
+            </Stack>
           </Stack>
         </Stack>
       </Paper>

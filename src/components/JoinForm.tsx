@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useHMSActions } from "@100mslive/react-sdk";
 import { useState } from "react";
+import { useSnackbar } from "notistack";
 
 export default function JoinForm() {
   const { register, handleSubmit } = useForm();
@@ -19,22 +20,32 @@ export default function JoinForm() {
 
   const hmsActions = useHMSActions();
 
+  const { enqueueSnackbar } = useSnackbar();
+  const showSnack = (message: string, variant: any) => {
+    enqueueSnackbar(message, { variant: variant });
+  };
+
   const handleFormSubmit = async (res: any) => {
     let authToken;
     if (res?.roomcode.length > 0) {
-      authToken = await hmsActions.getAuthTokenByRoomCode({
-        roomCode: res.roomcode,
-      });
+      try {
+        authToken = await hmsActions.getAuthTokenByRoomCode({
+          roomCode: res.roomcode,
+        });
+      } catch (e) {
+        showSnack("Invalid room code", "error");
+      }
     } else {
       authToken = await hmsActions.getAuthTokenByRoomCode({
         roomCode: channel,
       });
     }
-
-    try {
-      await hmsActions.join({ userName: res.username, authToken: authToken });
-    } catch (e) {
-      console.log(e);
+    if (authToken) {
+      try {
+        await hmsActions.join({ userName: res.username, authToken: authToken });
+      } catch (e) {
+        showSnack("Invalid auth token", "error");
+      }
     }
   };
 
