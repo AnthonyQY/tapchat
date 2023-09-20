@@ -75,7 +75,7 @@ function Peer({ peer }: { peer: any }) {
                 width: "inherit",
                 borderTopLeftRadius: "0.5rem",
                 borderTopRightRadius: "0.5rem",
-                height: isDesktop ? "inherit" : "25vh",
+                height: isDesktop ? (peer.isLocal ? "100%" : "50vh") : "25vh",
               }}
               autoPlay
               muted
