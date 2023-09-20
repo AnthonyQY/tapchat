@@ -1,22 +1,38 @@
 import { useVideo } from "@100mslive/react-sdk";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 
 function Peer({ peer }: { peer: any }) {
   const { videoRef } = useVideo({
     trackId: peer.videoTrack,
   });
   return (
-    <div className="peer-container">
-      <video
-        ref={videoRef}
-        className={`peer-video ${peer.isLocal ? "local" : ""}`}
-        autoPlay
-        muted
-        playsInline
-      />
-      <div className="peer-name">
-        {peer.name} {peer.isLocal ? "(You)" : ""}
-      </div>
-    </div>
+    <Paper
+      sx={{
+        borderTopLeftRadius: "0.5rem",
+        borderTopRightRadius: "0.5rem",
+      }}
+    >
+      <Stack>
+        <Box sx={{ width: "100%", height: "100%" }}>
+          <video
+            ref={videoRef}
+            className={`peer-video ${peer.isLocal ? "local" : ""}`}
+            style={{
+              width: "inherit",
+              borderTopLeftRadius: "0.5rem",
+              borderTopRightRadius: "0.5rem",
+              height: "inherit",
+            }}
+            autoPlay
+            muted
+            playsInline
+          />
+        </Box>
+        <Typography variant="subtitle1" marginLeft={"1rem"}>
+          {peer.name} {peer.isLocal ? "(You)" : ""}
+        </Typography>
+      </Stack>
+    </Paper>
   );
 }
 

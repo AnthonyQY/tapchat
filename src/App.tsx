@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import RoomPage from "./pages/RoomPage";
+import "./globals.css";
 
 function App() {
   return (
