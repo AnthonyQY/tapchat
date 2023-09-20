@@ -1,5 +1,6 @@
 import {
   selectConnectionQualityByPeerID,
+  selectPeerAudioByID,
   useHMSStore,
   useVideo,
 } from "@100mslive/react-sdk";
@@ -11,11 +12,15 @@ import SignalCellularAlt1BarIcon from "@mui/icons-material/SignalCellularAlt1Bar
 import SignalCellularConnectedNoInternet0BarIcon from "@mui/icons-material/SignalCellularConnectedNoInternet0Bar";
 import SignalCellular0BarIcon from "@mui/icons-material/SignalCellular0Bar";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from "react";
 
 function Peer({ peer }: { peer: any }) {
   const downlinkQuality = useHMSStore(
     selectConnectionQualityByPeerID(peer.id)
   )?.downlinkQuality;
+
+  const peerAudioLevel = useHMSStore(selectPeerAudioByID(peer.id));
+
   const { videoRef } = useVideo({
     trackId: peer.videoTrack,
   });
@@ -31,6 +36,10 @@ function Peer({ peer }: { peer: any }) {
       scale: 0,
     },
   };
+
+  useEffect(() => {
+    console.log(peerAudioLevel);
+  }, [peerAudioLevel]);
   return (
     <AnimatePresence>
       <Paper
@@ -39,6 +48,8 @@ function Peer({ peer }: { peer: any }) {
           borderTopRightRadius: "0.5rem",
           height: "fit-content",
           width: "100%",
+          border:
+            peerAudioLevel > 0 ? "3px solid #39FF14" : "3px solid transparent",
         }}
         component={motion.div}
         variants={peerVariants}
