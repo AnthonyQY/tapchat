@@ -55,7 +55,7 @@ function Peer({ peer }: { peer: any }) {
         sx={{
           borderTopLeftRadius: "0.5rem",
           borderTopRightRadius: "0.5rem",
-          height: isDesktop ? "fit-content" : "30vh",
+          height: "fit-content",
           width: "100%",
           border:
             peerAudioLevel > 0 ? "3px solid #39FF14" : "3px solid transparent",
@@ -75,7 +75,7 @@ function Peer({ peer }: { peer: any }) {
                 width: "inherit",
                 borderTopLeftRadius: "0.5rem",
                 borderTopRightRadius: "0.5rem",
-                height: "inherit",
+                height: isDesktop ? "inherit" : "25vh",
               }}
               autoPlay
               muted
