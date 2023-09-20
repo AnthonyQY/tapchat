@@ -55,27 +55,42 @@ export default function LandingPage() {
         height={"100%"}
         spacing={5}
       >
-        <Typography
-          fontFamily={"coolvetica"}
-          variant={isDesktop ? "h1" : "h2"}
-          fontWeight={"bold"}
-          component={motion.div}
-          whileHover={{
-            scale: 1.2,
-            transition: { duration: 0.3 },
-          }}
-          variants={typographyVariants}
-          initial="hidden"
-          whileInView="visible"
-          sx={{
-            ":hover": {
-              cursor: "default",
-            },
-            userSelect: "none",
-          }}
-        >
-          tapchat
-        </Typography>
+        <Stack textAlign={"center"}>
+          <Typography
+            fontFamily={"coolvetica"}
+            variant={isDesktop ? "h1" : "h2"}
+            fontWeight={"bold"}
+            component={motion.div}
+            whileHover={{
+              scale: 1.2,
+              transition: { duration: 0.3 },
+            }}
+            variants={typographyVariants}
+            initial="hidden"
+            whileInView="visible"
+            sx={{
+              ":hover": {
+                cursor: "default",
+              },
+              userSelect: "none",
+            }}
+          >
+            tapchat
+          </Typography>
+          <Typography
+            fontFamily={"coolvetica"}
+            variant={isDesktop ? "subtitle1" : "subtitle2"}
+            sx={{
+              ":hover": {
+                cursor: "default",
+              },
+              userSelect: "none",
+            }}
+          >
+            Video conferencing for everyone
+          </Typography>
+        </Stack>
+
         <Box
           component={motion.div}
           variants={formVariants}
