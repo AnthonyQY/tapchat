@@ -147,7 +147,7 @@ export default function RoomPage() {
             <Stack
               flex={1}
               height={isDesktop ? "80vh" : "80vh"}
-              maxHeight={"80vh"}
+              maxHeight={isDesktop ? "80vh" : "30vh"}
               spacing={1}
               direction={peers.length > 1 ? "column" : "row"}
               display={"flex"}
