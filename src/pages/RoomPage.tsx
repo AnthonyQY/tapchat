@@ -149,13 +149,17 @@ export default function RoomPage() {
               height={isDesktop ? "80vh" : "80vh"}
               maxHeight={"80vh"}
               spacing={1}
+              direction={peers.length > 1 ? "column" : "row"}
+              display={"flex"}
             >
-              {peers.map((peer) => {
-                if (peer.isLocal) {
-                  return <Peer key={peer.id} peer={peer} />;
-                }
-              })}
-              {isDesktop ? <ChatWidget /> : null}
+              <Stack flex={2}>
+                {peers.map((peer) => {
+                  if (peer.isLocal) {
+                    return <Peer key={peer.id} peer={peer} />;
+                  }
+                })}
+              </Stack>
+              <Box flex={0.8}>{isDesktop ? <ChatWidget /> : null}</Box>
             </Stack>
 
             <Box
