@@ -67,6 +67,12 @@ export default function LandingPage() {
           variants={typographyVariants}
           initial="hidden"
           whileInView="visible"
+          sx={{
+            ":hover": {
+              cursor: "default",
+            },
+            userSelect: "none",
+          }}
         >
           tapchat
         </Typography>
