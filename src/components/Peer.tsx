@@ -6,7 +6,7 @@ import {
   useHMSStore,
   useVideo,
 } from "@100mslive/react-sdk";
-import { Box, Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography, useMediaQuery } from "@mui/material";
 
 import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt";
 import SignalCellularAlt2BarIcon from "@mui/icons-material/SignalCellularAlt2Bar";
@@ -21,6 +21,7 @@ import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
 
 function Peer({ peer }: { peer: any }) {
+  const isDesktop = useMediaQuery("(min-width: 800px)");
   const downlinkQuality = useHMSStore(
     selectConnectionQualityByPeerID(peer.id)
   )?.downlinkQuality;
@@ -54,7 +55,7 @@ function Peer({ peer }: { peer: any }) {
         sx={{
           borderTopLeftRadius: "0.5rem",
           borderTopRightRadius: "0.5rem",
-          height: "fit-content",
+          height: isDesktop ? "fit-content" : "30vh",
           width: "100%",
           border:
             peerAudioLevel > 0 ? "3px solid #39FF14" : "3px solid transparent",
@@ -65,7 +66,7 @@ function Peer({ peer }: { peer: any }) {
         whileInView="visible"
         exit={{ opacity: 0 }}
       >
-        <Stack>
+        <Stack height={"inherit"}>
           <Box sx={{ width: "100%", height: "100%" }}>
             <video
               ref={videoRef}
