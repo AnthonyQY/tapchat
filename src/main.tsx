@@ -5,6 +5,7 @@ import { CssBaseline } from "@mui/material";
 import { HMSRoomProvider } from "@100mslive/react-sdk";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { SnackbarProvider } from "notistack";
 
 const darkTheme = createTheme({
   palette: {
@@ -15,12 +16,14 @@ const darkTheme = createTheme({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <HMSRoomProvider>
-        <ThemeProvider theme={darkTheme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>
-      </HMSRoomProvider>
+      <SnackbarProvider>
+        <HMSRoomProvider>
+          <ThemeProvider theme={darkTheme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </HMSRoomProvider>
+      </SnackbarProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
