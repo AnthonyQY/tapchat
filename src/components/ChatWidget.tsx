@@ -29,14 +29,18 @@ export default function ChatWidget() {
   };
 
   return (
-    <Paper sx={{ height: isDesktop ? "53vh" : "25vh" }}>
+    <Paper sx={{ height: isDesktop ? "53vh" : "25vh", maxWidth: "25rem" }}>
       <Stack height={"inherit"} spacing={1}>
         <Box paddingLeft={"1rem"} paddingTop={"0.5rem"}>
           <Typography variant="h6">Chat</Typography>
         </Box>
 
         <Divider />
-        <Stack overflow={"scroll"} paddingBottom={"1rem"}>
+        <Stack
+          overflow={"scroll"}
+          paddingBottom={"1rem"}
+          paddingRight={"0.5rem"}
+        >
           {allMessages.map((x) => (
             <ChatMessage message={x} />
           ))}

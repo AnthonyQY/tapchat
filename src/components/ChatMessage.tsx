@@ -9,7 +9,11 @@ export default function ChatMessage({ message }: { message: any }) {
       >
         {message.senderName}
       </Typography>
-      <Typography variant="body1" color={"#cccccc"}>
+      <Typography
+        variant="body1"
+        color={"#cccccc"}
+        sx={{ wordWrap: "break-word" }}
+      >
         {message.message}
       </Typography>
     </Stack>
