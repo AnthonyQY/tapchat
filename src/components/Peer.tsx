@@ -3,6 +3,8 @@ import {
   selectIsPeerAudioEnabled,
   selectIsPeerVideoEnabled,
   selectPeerAudioByID,
+  selectScreenShareByPeerID,
+  useHMSActions,
   useHMSStore,
   useVideo,
 } from "@100mslive/react-sdk";
@@ -14,7 +16,7 @@ import SignalCellularAlt1BarIcon from "@mui/icons-material/SignalCellularAlt1Bar
 import SignalCellularConnectedNoInternet0BarIcon from "@mui/icons-material/SignalCellularConnectedNoInternet0Bar";
 import SignalCellular0BarIcon from "@mui/icons-material/SignalCellular0Bar";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import MicIcon from "@mui/icons-material/Mic";
@@ -30,9 +32,13 @@ function Peer({ peer }: { peer: any }) {
   const audioOn = useHMSStore(selectIsPeerAudioEnabled(peer.id));
   const videoOn = useHMSStore(selectIsPeerVideoEnabled(peer.id));
 
-  const { videoRef } = useVideo({
-    trackId: peer.videoTrack,
-  });
+  const screenshareVideoTrack = useHMSStore(selectScreenShareByPeerID(peer.id));
+
+  const { videoRef } = useVideo({ trackId: peer.videoTrack });
+  const screenVideoRef = useRef(null);
+
+  const hmsActions = useHMSActions();
+
   const peerVariants = {
     visible: {
       opacity: 1,
@@ -47,8 +53,24 @@ function Peer({ peer }: { peer: any }) {
   };
 
   useEffect(() => {
-    console.log(peerAudioLevel);
-  }, [peerAudioLevel]);
+    let screenshareCheck = async () => {
+      if (screenshareVideoTrack && screenVideoRef.current) {
+        if (screenshareVideoTrack.enabled) {
+          await hmsActions.attachVideo(
+            screenshareVideoTrack.id,
+            screenVideoRef.current
+          );
+        } else {
+          await hmsActions.detachVideo(
+            screenshareVideoTrack.id,
+            screenVideoRef.current
+          );
+        }
+      }
+    };
+    screenshareCheck();
+  }, [screenshareVideoTrack]);
+
   return (
     <AnimatePresence>
       <Paper
@@ -68,19 +90,35 @@ function Peer({ peer }: { peer: any }) {
       >
         <Stack height={"inherit"}>
           <Box sx={{ width: "100%", height: "100%" }}>
-            <video
-              ref={videoRef}
-              className={`peer-video ${peer.isLocal ? "local" : ""}`}
-              style={{
-                width: "inherit",
-                borderTopLeftRadius: "0.5rem",
-                borderTopRightRadius: "0.5rem",
-                height: isDesktop ? (peer.isLocal ? "100%" : "50vh") : "25vh",
-              }}
-              autoPlay
-              muted
-              playsInline
-            />
+            {screenshareVideoTrack?.enabled ? (
+              <video
+                ref={screenVideoRef}
+                className={`peer-video ${peer.isLocal ? "local" : ""}`}
+                style={{
+                  width: "inherit",
+                  borderTopLeftRadius: "0.5rem",
+                  borderTopRightRadius: "0.5rem",
+                  height: isDesktop ? (peer.isLocal ? "100%" : "50vh") : "25vh",
+                }}
+                autoPlay
+                muted
+                playsInline
+              />
+            ) : (
+              <video
+                ref={videoRef}
+                className={`peer-video ${peer.isLocal ? "local" : ""}`}
+                style={{
+                  width: "inherit",
+                  borderTopLeftRadius: "0.5rem",
+                  borderTopRightRadius: "0.5rem",
+                  height: isDesktop ? (peer.isLocal ? "100%" : "50vh") : "25vh",
+                }}
+                autoPlay
+                muted
+                playsInline
+              />
+            )}
           </Box>
           <Stack padding={"0.25rem"} direction={"row"}>
             <Typography
