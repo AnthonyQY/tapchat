@@ -124,7 +124,9 @@ function Peer({ peer }: { peer: any }) {
             ) : (
               <Box
                 width={"inherit"}
-                height={peers.length > 1 ? "25vh" : "50vh"}
+                height={
+                  peer.isLocal ? (peers.length > 1 ? "25vh" : "50vh") : "50vh"
+                }
                 display={"flex"}
                 justifyContent={"center"}
                 alignItems={"center"}
