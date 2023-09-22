@@ -21,6 +21,7 @@ import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
+import NoPhotographyIcon from "@mui/icons-material/NoPhotography";
 
 function Peer({ peer }: { peer: any }) {
   const isDesktop = useMediaQuery("(min-width: 800px)");
@@ -79,8 +80,8 @@ function Peer({ peer }: { peer: any }) {
           borderTopRightRadius: "0.5rem",
           height: "fit-content",
           width: "100%",
-          border:
-            peerAudioLevel > 0 ? "3px solid #39FF14" : "3px solid transparent",
+          boxShadow:
+            peerAudioLevel > 0 ? " 0px 0px 5px 2px rgba(57,255,20,1)" : "none",
         }}
         component={motion.div}
         variants={peerVariants}
@@ -104,7 +105,7 @@ function Peer({ peer }: { peer: any }) {
                 muted
                 playsInline
               />
-            ) : (
+            ) : videoOn ? (
               <video
                 ref={videoRef}
                 className={`peer-video ${peer.isLocal ? "local" : ""}`}
@@ -118,6 +119,17 @@ function Peer({ peer }: { peer: any }) {
                 muted
                 playsInline
               />
+            ) : (
+              <Box
+                width={"inherit"}
+                height={"25vh"}
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                fontSize={isDesktop ? "12rem" : "6rem"}
+              >
+                <NoPhotographyIcon fontSize={"inherit"} />
+              </Box>
             )}
           </Box>
           <Stack padding={"0.25rem"} direction={"row"}>

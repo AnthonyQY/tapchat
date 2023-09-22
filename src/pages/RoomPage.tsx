@@ -66,8 +66,12 @@ export default function RoomPage() {
   };
 
   const handleToggleVideo = async () => {
-    await hmsActions.setLocalVideoEnabled(!videoEnabled);
-    setVideoPref(!videoEnabled);
+    if (screenshareEnabled && !videoEnabled) {
+      showSnack("Error: Cannot enable video during screen share", "error");
+    } else {
+      await hmsActions.setLocalVideoEnabled(!videoEnabled);
+      setVideoPref(!videoEnabled);
+    }
   };
 
   const handleShareScreen = async () => {
@@ -82,9 +86,10 @@ export default function RoomPage() {
     const checkScreenshare = async () => {
       if (screenshareEnabled) {
         await hmsActions.setLocalVideoEnabled(false);
-      }
-      if (!screenshareEnabled && videoPref) {
+      } else if (!screenshareEnabled && videoPref) {
         await hmsActions.setLocalVideoEnabled(true);
+      } else if (screenshareEnabled && videoEnabled) {
+        await hmsActions.setLocalVideoEnabled(false);
       }
     };
     checkScreenshare();
@@ -182,10 +187,10 @@ export default function RoomPage() {
             <Stack
               flex={1}
               height={isDesktop ? "80vh" : "80vh"}
-              maxHeight={isDesktop ? "80vh" : "3vh"}
+              maxHeight={isDesktop ? "80vh" : "30vh"}
               spacing={1}
               direction={peers.length > 1 ? "column" : "row"}
-              display={"flex"}
+              display={isDesktop ? "flex" : "block"}
             >
               <Stack flex={2}>
                 {peers.map((peer) => {
