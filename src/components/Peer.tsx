@@ -3,6 +3,7 @@ import {
   selectIsPeerAudioEnabled,
   selectIsPeerVideoEnabled,
   selectPeerAudioByID,
+  selectPeers,
   selectScreenShareByPeerID,
   useHMSActions,
   useHMSStore,
@@ -32,6 +33,7 @@ function Peer({ peer }: { peer: any }) {
   const peerAudioLevel = useHMSStore(selectPeerAudioByID(peer.id));
   const audioOn = useHMSStore(selectIsPeerAudioEnabled(peer.id));
   const videoOn = useHMSStore(selectIsPeerVideoEnabled(peer.id));
+  const peers = useHMSStore(selectPeers);
 
   const screenshareVideoTrack = useHMSStore(selectScreenShareByPeerID(peer.id));
 
@@ -122,7 +124,7 @@ function Peer({ peer }: { peer: any }) {
             ) : (
               <Box
                 width={"inherit"}
-                height={"25vh"}
+                height={peers.length > 1 ? "25vh" : "50vh"}
                 display={"flex"}
                 justifyContent={"center"}
                 alignItems={"center"}
