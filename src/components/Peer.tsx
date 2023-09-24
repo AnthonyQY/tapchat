@@ -67,7 +67,9 @@ function Peer({ peer }: { peer: any }) {
         exit={{ opacity: 0 }}
       >
         <Stack height={"inherit"}>
-          <Box sx={{ width: "100%", height: "100%" }}>
+          <Box
+            sx={{ width: "100%", position: "relative", paddingTop: "62.5%" }}
+          >
             <video
               ref={videoRef}
               className={`peer-video ${peer.isLocal ? "local" : ""}`}
@@ -76,11 +78,16 @@ function Peer({ peer }: { peer: any }) {
                 borderTopLeftRadius: "0.5rem",
                 borderTopRightRadius: "0.5rem",
                 height: isDesktop ? (peer.isLocal ? "100%" : "50vh") : "25vh",
+                position: "absolute",
+                top: "0",
+                bottom: "0",
+                right: "0",
+                left: "0",
               }}
               autoPlay
               muted
               playsInline
-            />
+            />{" "}
           </Box>
           <Stack padding={"0.25rem"} direction={"row"}>
             <Typography
