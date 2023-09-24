@@ -3,7 +3,6 @@ import {
   selectIsPeerAudioEnabled,
   selectIsPeerVideoEnabled,
   selectPeerAudioByID,
-  selectPeers,
   selectScreenShareByPeerID,
   useHMSActions,
   useHMSStore,
@@ -33,7 +32,6 @@ function Peer({ peer }: { peer: any }) {
   const peerAudioLevel = useHMSStore(selectPeerAudioByID(peer.id));
   const audioOn = useHMSStore(selectIsPeerAudioEnabled(peer.id));
   const videoOn = useHMSStore(selectIsPeerVideoEnabled(peer.id));
-  const peers = useHMSStore(selectPeers);
 
   const screenshareVideoTrack = useHMSStore(selectScreenShareByPeerID(peer.id));
 
@@ -56,7 +54,7 @@ function Peer({ peer }: { peer: any }) {
   };
 
   useEffect(() => {
-    let screenshareCheck = async () => {
+    const screenshareCheck = async () => {
       if (screenshareVideoTrack && screenVideoRef.current) {
         if (screenshareVideoTrack.enabled) {
           await hmsActions.attachVideo(
@@ -72,7 +70,7 @@ function Peer({ peer }: { peer: any }) {
       }
     };
     screenshareCheck();
-  }, [screenshareVideoTrack]);
+  }, [screenshareVideoTrack, hmsActions]);
 
   return (
     <AnimatePresence>
@@ -92,7 +90,9 @@ function Peer({ peer }: { peer: any }) {
         exit={{ opacity: 0 }}
       >
         <Stack height={"inherit"}>
-          <Box sx={{ width: "100%", height: "100%" }}>
+          <Box
+            sx={{ width: "100%", position: "relative", paddingTop: "56.25%" }}
+          >
             {screenshareVideoTrack?.enabled ? (
               <video
                 ref={screenVideoRef}
@@ -102,6 +102,11 @@ function Peer({ peer }: { peer: any }) {
                   borderTopLeftRadius: "0.5rem",
                   borderTopRightRadius: "0.5rem",
                   height: isDesktop ? (peer.isLocal ? "100%" : "50vh") : "25vh",
+                  position: "absolute",
+                  top: "0",
+                  bottom: "0",
+                  right: "0",
+                  left: "0",
                 }}
                 autoPlay
                 muted
@@ -116,6 +121,11 @@ function Peer({ peer }: { peer: any }) {
                   borderTopLeftRadius: "0.5rem",
                   borderTopRightRadius: "0.5rem",
                   height: isDesktop ? (peer.isLocal ? "100%" : "50vh") : "25vh",
+                  position: "absolute",
+                  top: "0",
+                  bottom: "0",
+                  right: "0",
+                  left: "0",
                 }}
                 autoPlay
                 muted
@@ -123,10 +133,14 @@ function Peer({ peer }: { peer: any }) {
               />
             ) : (
               <Box
-                width={"inherit"}
-                height={
-                  peer.isLocal ? (peers.length > 1 ? "25vh" : "50vh") : "50vh"
-                }
+                sx={{
+                  width: "inherit",
+                  position: "absolute",
+                  top: "0",
+                  bottom: "0",
+                  right: "0",
+                  left: "0",
+                }}
                 display={"flex"}
                 justifyContent={"center"}
                 alignItems={"center"}
