@@ -14,8 +14,11 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import ChatMessage from "./ChatMessage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
+
+import useSound from "use-sound";
+import messagePopSfx from "../sounds/messagePop.mp3";
 
 export default function ChatWidget() {
   const hmsActions = useHMSActions();
@@ -27,6 +30,11 @@ export default function ChatWidget() {
     hmsActions.sendBroadcastMessage(message);
     setMessage("");
   };
+
+  const [playMsgPop] = useSound(messagePopSfx);
+  useEffect(() => {
+    playMsgPop();
+  }, [allMessages]);
 
   return (
     <Paper sx={{ height: isDesktop ? "53vh" : "25vh", maxWidth: "25rem" }}>

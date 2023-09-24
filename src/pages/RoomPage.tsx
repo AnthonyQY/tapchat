@@ -33,6 +33,10 @@ import ChatWidget from "../components/ChatWidget";
 import PresentToAllIcon from "@mui/icons-material/PresentToAll";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 
+import useSound from "use-sound";
+import startSfx from "../sounds/start.wav";
+import backSfx from "../sounds/back.wav";
+
 export default function RoomPage() {
   const hmsActions = useHMSActions();
 
@@ -50,6 +54,9 @@ export default function RoomPage() {
   const [videoPref, setVideoPref] = useState<boolean>(true);
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const [playStart] = useSound(startSfx);
+  const [playBack] = useSound(backSfx);
 
   useEffect(() => {
     if (!isConnected) {
@@ -105,9 +112,11 @@ export default function RoomPage() {
     switch (notification.type) {
       case HMSNotificationTypes.PEER_JOINED:
         showSnack(`${notification.data.name} joined`, "success");
+        playStart();
         break;
       case HMSNotificationTypes.PEER_LEFT:
         showSnack(`${notification.data.name} left`, "error");
+        playBack();
         break;
       case HMSNotificationTypes.NEW_MESSAGE:
         /**showSnack(
@@ -117,18 +126,23 @@ export default function RoomPage() {
         break;
       case HMSNotificationTypes.ERROR:
         showSnack(`Error code: ${notification.data.code}`, "error");
+        playBack();
         break;
       case HMSNotificationTypes.RECONNECTING:
         showSnack("Reconnecting to room", "warning");
+        playBack();
         break;
       case HMSNotificationTypes.RECONNECTED:
         showSnack(`Reconnected successfully`, "success");
+        playStart();
         break;
       case HMSNotificationTypes.ROOM_ENDED:
         showSnack(`Room ended: ${notification.data.reason}`, "error");
+        playBack();
         break;
       case HMSNotificationTypes.REMOVED_FROM_ROOM:
         showSnack(`Removed from room: ${notification.data.reason}`, "error");
+        playBack();
         break;
       default:
         break;

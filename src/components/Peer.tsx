@@ -74,115 +74,129 @@ function Peer({ peer }: { peer: any }) {
 
   return (
     <AnimatePresence>
-      <Paper
-        sx={{
-          borderTopLeftRadius: "0.5rem",
-          borderTopRightRadius: "0.5rem",
-          height: "fit-content",
-          width: "100%",
-          boxShadow:
-            peerAudioLevel > 0 ? " 0px 0px 5px 2px rgba(57,255,20,1)" : "none",
-        }}
-        component={motion.div}
-        variants={peerVariants}
-        initial="hidden"
-        whileInView="visible"
-        exit={{ opacity: 0 }}
-      >
-        <Stack height={"inherit"}>
-          <Box
-            sx={{ width: "100%", position: "relative", paddingTop: "56.25%" }}
-          >
-            {screenshareVideoTrack?.enabled ? (
-              <video
-                ref={screenVideoRef}
-                className={`peer-video ${peer.isLocal ? "local" : ""}`}
-                style={{
-                  width: "inherit",
-                  borderTopLeftRadius: "0.5rem",
-                  borderTopRightRadius: "0.5rem",
-                  height: isDesktop ? (peer.isLocal ? "100%" : "50vh") : "25vh",
-                  position: "absolute",
-                  top: "0",
-                  bottom: "0",
-                  right: "0",
-                  left: "0",
-                }}
-                autoPlay
-                muted
-                playsInline
-              />
-            ) : videoOn ? (
-              <video
-                ref={videoRef}
-                className={`peer-video ${peer.isLocal ? "local" : ""}`}
-                style={{
-                  width: "inherit",
-                  borderTopLeftRadius: "0.5rem",
-                  borderTopRightRadius: "0.5rem",
-                  height: isDesktop ? (peer.isLocal ? "100%" : "50vh") : "25vh",
-                  position: "absolute",
-                  top: "0",
-                  bottom: "0",
-                  right: "0",
-                  left: "0",
-                }}
-                autoPlay
-                muted
-                playsInline
-              />
-            ) : (
-              <Box
-                sx={{
-                  width: "inherit",
-                  position: "absolute",
-                  top: "0",
-                  bottom: "0",
-                  right: "0",
-                  left: "0",
-                }}
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                fontSize={isDesktop ? "12rem" : "6rem"}
-              >
-                <NoPhotographyIcon fontSize={"inherit"} />
-              </Box>
-            )}
-          </Box>
-          <Stack padding={"0.25rem"} direction={"row"}>
-            <Typography
-              variant="subtitle1"
-              marginLeft={"1rem"}
-              color={peer.isLocal ? "lightgreen" : "white"}
+      <Box padding={"5px"}>
+        <Paper
+          sx={{
+            borderTopLeftRadius: "0.5rem",
+            borderTopRightRadius: "0.5rem",
+            height: "fit-content",
+            width: "100%",
+            boxShadow:
+              peerAudioLevel > 0
+                ? " 0px 0px 5px 2px rgba(57,255,20,1)"
+                : "none",
+          }}
+          component={motion.div}
+          variants={peerVariants}
+          initial="hidden"
+          whileInView="visible"
+          exit={{ opacity: 0 }}
+        >
+          <Stack height={"inherit"} gap={3}>
+            <Box
+              sx={{ width: "100%", position: "relative", paddingTop: "56.25%" }}
             >
-              {peer.name} {peer.isLocal ? "(You)" : ""}
-            </Typography>
-            <Stack direction={"row"} marginLeft={"auto"}>
-              {audioOn ? <MicIcon /> : <MicOffIcon color="error" />}
-              {videoOn ? <VideocamIcon /> : <VideocamOffIcon color="error" />}
+              {screenshareVideoTrack?.enabled ? (
+                <video
+                  ref={screenVideoRef}
+                  className={`peer-video ${peer.isLocal ? "local" : ""}`}
+                  style={{
+                    width: "inherit",
+                    borderTopLeftRadius: "0.5rem",
+                    borderTopRightRadius: "0.5rem",
+                    height: isDesktop
+                      ? peer.isLocal
+                        ? "100%"
+                        : "50vh"
+                      : "25vh",
+                    position: "absolute",
+                    top: "0",
+                    bottom: "0",
+                    right: "0",
+                    left: "0",
+                  }}
+                  autoPlay
+                  muted
+                  playsInline
+                />
+              ) : videoOn ? (
+                <video
+                  ref={videoRef}
+                  className={`peer-video ${peer.isLocal ? "local" : ""}`}
+                  style={{
+                    width: "inherit",
+                    borderTopLeftRadius: "0.5rem",
+                    borderTopRightRadius: "0.5rem",
+                    height: isDesktop
+                      ? peer.isLocal
+                        ? "100%"
+                        : "50vh"
+                      : "25vh",
+                    position: "absolute",
+                    top: "0",
+                    bottom: "0",
+                    right: "0",
+                    left: "0",
+                  }}
+                  autoPlay
+                  muted
+                  playsInline
+                />
+              ) : (
+                <Box
+                  sx={{
+                    width: "inherit",
+                    position: "absolute",
+                    top: "0",
+                    bottom: "0",
+                    right: "0",
+                    left: "0",
+                  }}
+                  display={"flex"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  fontSize={
+                    isDesktop ? (peer.isLocal ? "6rem" : "12rem") : "6rem"
+                  }
+                >
+                  <NoPhotographyIcon fontSize={"inherit"} />
+                </Box>
+              )}
+            </Box>
+            <Stack padding={"0.25rem"} direction={"row"}>
+              <Typography
+                variant="subtitle1"
+                marginLeft={"1rem"}
+                color={peer.isLocal ? "lightgreen" : "white"}
+              >
+                {peer.name} {peer.isLocal ? "(You)" : ""}
+              </Typography>
+              <Stack direction={"row"} marginLeft={"auto"}>
+                {audioOn ? <MicIcon /> : <MicOffIcon color="error" />}
+                {videoOn ? <VideocamIcon /> : <VideocamOffIcon color="error" />}
 
-              {downlinkQuality == -1 ? (
-                <SignalCellular0BarIcon color="primary" />
-              ) : null}
-              {downlinkQuality == 0 ? (
-                <SignalCellularConnectedNoInternet0BarIcon color="error" />
-              ) : null}
-              {downlinkQuality == 1 ? (
-                <SignalCellularAlt1BarIcon color="error" />
-              ) : null}
-              {downlinkQuality == 2 ? (
-                <SignalCellularAlt2BarIcon color="warning" />
-              ) : null}
-              {downlinkQuality !== undefined ? (
-                downlinkQuality >= 3 ? (
-                  <SignalCellularAltIcon color="success" />
-                ) : null
-              ) : null}
+                {downlinkQuality == -1 ? (
+                  <SignalCellular0BarIcon color="primary" />
+                ) : null}
+                {downlinkQuality == 0 ? (
+                  <SignalCellularConnectedNoInternet0BarIcon color="error" />
+                ) : null}
+                {downlinkQuality == 1 ? (
+                  <SignalCellularAlt1BarIcon color="error" />
+                ) : null}
+                {downlinkQuality == 2 ? (
+                  <SignalCellularAlt2BarIcon color="warning" />
+                ) : null}
+                {downlinkQuality !== undefined ? (
+                  downlinkQuality >= 3 ? (
+                    <SignalCellularAltIcon color="success" />
+                  ) : null
+                ) : null}
+              </Stack>
             </Stack>
           </Stack>
-        </Stack>
-      </Paper>
+        </Paper>
+      </Box>
     </AnimatePresence>
   );
 }
