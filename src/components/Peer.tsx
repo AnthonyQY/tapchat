@@ -3,7 +3,6 @@ import {
   selectIsPeerAudioEnabled,
   selectIsPeerVideoEnabled,
   selectPeerAudioByID,
-  selectPeers,
   selectScreenShareByPeerID,
   useHMSActions,
   useHMSStore,
@@ -33,7 +32,6 @@ function Peer({ peer }: { peer: any }) {
   const peerAudioLevel = useHMSStore(selectPeerAudioByID(peer.id));
   const audioOn = useHMSStore(selectIsPeerAudioEnabled(peer.id));
   const videoOn = useHMSStore(selectIsPeerVideoEnabled(peer.id));
-  const peers = useHMSStore(selectPeers);
 
   const screenshareVideoTrack = useHMSStore(selectScreenShareByPeerID(peer.id));
 
