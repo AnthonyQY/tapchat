@@ -68,7 +68,7 @@ function Peer({ peer }: { peer: any }) {
       >
         <Stack height={"inherit"}>
           <Box
-            sx={{ width: "100%", position: "relative", paddingTop: "62.5%" }}
+            sx={{ width: "100%", position: "relative", paddingTop: "56.25%" }}
           >
             <video
               ref={videoRef}
