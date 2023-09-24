@@ -54,7 +54,7 @@ function Peer({ peer }: { peer: any }) {
   };
 
   useEffect(() => {
-    let screenshareCheck = async () => {
+    const screenshareCheck = async () => {
       if (screenshareVideoTrack && screenVideoRef.current) {
         if (screenshareVideoTrack.enabled) {
           await hmsActions.attachVideo(
@@ -70,7 +70,7 @@ function Peer({ peer }: { peer: any }) {
       }
     };
     screenshareCheck();
-  }, [screenshareVideoTrack]);
+  }, [screenshareVideoTrack, hmsActions]);
 
   return (
     <AnimatePresence>
