@@ -11,6 +11,7 @@ import {
   HMSNotificationTypes,
   selectIsConnectedToRoom,
   selectIsLocalAudioEnabled,
+  selectIsLocalScreenShared,
   selectIsLocalVideoEnabled,
   selectPeers,
   useHMSActions,
@@ -18,7 +19,7 @@ import {
   useHMSStore,
 } from "@100mslive/react-sdk";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Peer from "../components/Peer";
 
 import MicOffIcon from "@mui/icons-material/MicOff";
@@ -29,18 +30,24 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useSnackbar } from "notistack";
 import ChatWidget from "../components/ChatWidget";
 
+import PresentToAllIcon from "@mui/icons-material/PresentToAll";
+import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
+
 export default function RoomPage() {
   const hmsActions = useHMSActions();
 
   const isConnected = useHMSStore(selectIsConnectedToRoom);
   const audioEnabled = useHMSStore(selectIsLocalAudioEnabled);
   const videoEnabled = useHMSStore(selectIsLocalVideoEnabled);
+  const screenshareEnabled = useHMSStore(selectIsLocalScreenShared);
 
   const peers = useHMSStore(selectPeers);
 
   const navigate = useNavigate();
 
   const isDesktop = useMediaQuery("(min-width: 800px)");
+
+  const [videoPref, setVideoPref] = useState<boolean>(true);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -58,13 +65,35 @@ export default function RoomPage() {
     hmsActions.setLocalAudioEnabled(!audioEnabled);
   };
 
-  const handleToggleVideo = () => {
-    hmsActions.setLocalVideoEnabled(!videoEnabled);
+  const handleToggleVideo = async () => {
+    if (screenshareEnabled && !videoEnabled) {
+      showSnack("Error: Cannot enable video during screen share", "error");
+    } else {
+      await hmsActions.setLocalVideoEnabled(!videoEnabled);
+      setVideoPref(!videoEnabled);
+    }
+  };
+
+  const handleShareScreen = async () => {
+    await hmsActions.setScreenShareEnabled(!screenshareEnabled);
   };
 
   const showSnack = (message: string, variant: any) => {
     enqueueSnackbar(message, { variant: variant });
   };
+
+  useEffect(() => {
+    const checkScreenshare = async () => {
+      if (screenshareEnabled) {
+        await hmsActions.setLocalVideoEnabled(false);
+      } else if (!screenshareEnabled && videoPref) {
+        await hmsActions.setLocalVideoEnabled(true);
+      } else if (screenshareEnabled && videoEnabled) {
+        await hmsActions.setLocalVideoEnabled(false);
+      }
+    };
+    checkScreenshare();
+  }, [screenshareEnabled]);
 
   // Notification event handler
   const notification = useHMSNotifications();
@@ -128,6 +157,17 @@ export default function RoomPage() {
                 {videoEnabled ? <VideocamIcon /> : <VideocamOffIcon />}
               </IconButton>
               <IconButton
+                aria-label="screen share"
+                onClick={handleShareScreen}
+                color={screenshareEnabled ? "error" : "default"}
+              >
+                {screenshareEnabled ? (
+                  <CancelPresentationIcon />
+                ) : (
+                  <PresentToAllIcon />
+                )}
+              </IconButton>
+              <IconButton
                 aria-label="leave room"
                 onClick={handleExitRoom}
                 color="error"
@@ -150,7 +190,7 @@ export default function RoomPage() {
               maxHeight={isDesktop ? "80vh" : "30vh"}
               spacing={1}
               direction={peers.length > 1 ? "column" : "row"}
-              display={"flex"}
+              display={isDesktop ? "flex" : "block"}
             >
               <Stack flex={2}>
                 {peers.map((peer) => {
