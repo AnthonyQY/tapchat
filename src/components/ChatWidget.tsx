@@ -14,12 +14,10 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
+
 import ChatMessage from "./ChatMessage";
 import { useEffect, useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
-
-import useSound from "use-sound";
-import messagePopSfx from "../sounds/messagePop.mp3";
 
 export default function ChatWidget() {
   const hmsActions = useHMSActions();
@@ -31,11 +29,6 @@ export default function ChatWidget() {
     hmsActions.sendBroadcastMessage(message);
     setMessage("");
   };
-
-  const [playMsgPop] = useSound(messagePopSfx);
-  useEffect(() => {
-    playMsgPop();
-  }, [allMessages]);
 
   return (
     <Box padding={"5px"}>

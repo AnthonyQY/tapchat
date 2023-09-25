@@ -275,7 +275,15 @@ function Peer({ peer }: { peer: any }) {
           "aria-labelledby": "basic-button",
         }}
       >
-        <Stack padding={"1rem"} direction={"row"} width={"20rem"}>
+        <Stack
+          padding={"1rem"}
+          paddingRight={"2rem"}
+          direction={"row"}
+          width={"20rem"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          spacing={1}
+        >
           <VolumeUp />
           <Slider
             aria-label="Volume"

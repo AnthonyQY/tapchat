@@ -38,6 +38,10 @@ import useSound from "use-sound";
 import startSfx from "../sounds/start.wav";
 import backSfx from "../sounds/back.wav";
 
+import openSfx from "../sounds/open.mp3";
+import closeSfx from "../sounds/close.mp3";
+import messagePopSfx from "../sounds/messagePop.mp3";
+
 export default function RoomPage() {
   const hmsActions = useHMSActions();
 
@@ -58,6 +62,9 @@ export default function RoomPage() {
 
   const [playStart] = useSound(startSfx);
   const [playBack] = useSound(backSfx);
+  const [playMsgPop] = useSound(messagePopSfx);
+  const [playOpen] = useSound(openSfx);
+  const [playClose] = useSound(closeSfx);
 
   useEffect(() => {
     if (!isConnected) {
@@ -71,12 +78,22 @@ export default function RoomPage() {
 
   const handleToggleAudio = () => {
     hmsActions.setLocalAudioEnabled(!audioEnabled);
+    if (audioEnabled) {
+      playClose();
+    } else {
+      playOpen();
+    }
   };
 
   const handleToggleVideo = async () => {
     if (screenshareEnabled && !videoEnabled) {
       showSnack("Error: Cannot enable video during screen share", "error");
     } else {
+      if (videoEnabled) {
+        playClose();
+      } else {
+        playOpen();
+      }
       await hmsActions.setLocalVideoEnabled(!videoEnabled);
       setVideoPref(!videoEnabled);
     }
@@ -120,10 +137,7 @@ export default function RoomPage() {
         playBack();
         break;
       case HMSNotificationTypes.NEW_MESSAGE:
-        /**showSnack(
-          `${notification.data.message} received from ${notification.data.senderName}`,
-          "info"
-        );**/
+        playMsgPop();
         break;
       case HMSNotificationTypes.ERROR:
         showSnack(`Error code: ${notification.data.code}`, "error");
