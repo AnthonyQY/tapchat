@@ -32,7 +32,7 @@ export default function ChatWidget() {
 
   return (
     <Box padding={"5px"}>
-      <Paper sx={{ height: isDesktop ? "53vh" : "25vh", maxWidth: "25rem" }}>
+      <Paper sx={{ height: isDesktop ? "45vh" : "25vh", maxWidth: "25rem" }}>
         <Stack height={"inherit"} spacing={1}>
           <Box paddingLeft={"1rem"} paddingTop={"0.5rem"}>
             <Typography variant="h6">Chat</Typography>
