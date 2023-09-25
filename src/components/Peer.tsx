@@ -12,6 +12,7 @@ import {
 } from "@100mslive/react-sdk";
 import {
   Box,
+  IconButton,
   Menu,
   Paper,
   Slider,
@@ -33,6 +34,7 @@ import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
 import NoPhotographyIcon from "@mui/icons-material/NoPhotography";
 import VolumeUp from "@mui/icons-material/VolumeUp";
+import VolumeOff from "@mui/icons-material/VolumeOff";
 
 function Peer({ peer }: { peer: any }) {
   const isDesktop = useMediaQuery("(min-width: 800px)");
@@ -52,7 +54,10 @@ function Peer({ peer }: { peer: any }) {
   const track = useHMSStore(selectAudioTrackByPeerID(peer.id));
   const currVolume = useHMSStore(selectAudioTrackVolume(track?.id));
 
+  const [muted, setMuted] = useState<boolean>(false);
+
   const [volume, setVolume] = useState<any>(100);
+  const [previousVolume, setPreviousVolume] = useState(0);
 
   const [contextMenu, setContextMenu] = useState<{
     mouseX: number;
@@ -284,11 +289,28 @@ function Peer({ peer }: { peer: any }) {
           alignItems={"center"}
           spacing={1}
         >
-          <VolumeUp />
+          <IconButton
+            aria-label="mute"
+            onClick={() => {
+              if (!muted) {
+                setPreviousVolume(volume);
+                setVolume(0);
+              }
+              if (muted) {
+                setVolume(previousVolume);
+              }
+              setMuted(!muted);
+            }}
+            color={audioOn ? "default" : "error"}
+          >
+            {audioOn ? <VolumeUp /> : <VolumeOff />}
+          </IconButton>
+
           <Slider
             aria-label="Volume"
             value={volume}
             onChange={(e: any) => setVolume(e.target.value)}
+            disabled={muted}
           />
         </Stack>
       </Menu>
