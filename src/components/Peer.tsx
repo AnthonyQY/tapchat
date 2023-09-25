@@ -301,9 +301,9 @@ function Peer({ peer }: { peer: any }) {
               }
               setMuted(!muted);
             }}
-            color={audioOn ? "default" : "error"}
+            color={muted ? "default" : "error"}
           >
-            {audioOn ? <VolumeUp /> : <VolumeOff />}
+            {muted ? <VolumeUp /> : <VolumeOff />}
           </IconButton>
 
           <Slider
