@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   useHMSStore,
   selectHMSMessages,
@@ -16,27 +15,48 @@ import {
 } from "@mui/material";
 
 import ChatMessage from "./ChatMessage";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 export default function ChatWidget() {
   const hmsActions = useHMSActions();
   const allMessages = useHMSStore(selectHMSMessages);
   const [message, setMessage] = useState<any>("");
   const isDesktop = useMediaQuery("(min-width: 800px)");
+  const chatBottomRef = useRef<null | HTMLDivElement>(null);
 
   const handleSendMessage = () => {
     hmsActions.sendBroadcastMessage(message);
     setMessage("");
+    scrollChatBottom();
+  };
+
+  const scrollChatBottom = () => {
+    chatBottomRef?.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <Box padding={"5px"}>
       <Paper sx={{ height: isDesktop ? "48vh" : "25vh", maxWidth: "25rem" }}>
         <Stack height={"inherit"} spacing={1}>
-          <Box paddingLeft={"1rem"} paddingTop={"0.5rem"}>
+          <Stack
+            paddingLeft={"1rem"}
+            paddingTop={"0.5rem"}
+            direction={"row"}
+            alignItems={"center"}
+          >
             <Typography variant="h6">Chat</Typography>
-          </Box>
+            <IconButton
+              aria-label="scroll to bottom"
+              onClick={scrollChatBottom}
+              sx={{
+                marginLeft: "auto",
+              }}
+            >
+              <ArrowDownwardIcon />
+            </IconButton>
+          </Stack>
 
           <Divider />
           <Stack
@@ -47,6 +67,7 @@ export default function ChatWidget() {
             {allMessages.map((x) => (
               <ChatMessage message={x} />
             ))}
+            <Box ref={chatBottomRef} />
           </Stack>
           <Stack direction={"row"} marginTop={"auto !important"} width={"100%"}>
             <TextField
