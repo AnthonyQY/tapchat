@@ -96,6 +96,7 @@ export default function LandingPage() {
           variants={formVariants}
           initial="hidden"
           whileInView="visible"
+          exit={"hidden"}
         >
           <JoinForm />
         </Box>
