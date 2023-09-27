@@ -25,6 +25,7 @@ export default function ChatWidget() {
   const [message, setMessage] = useState<any>("");
   const isDesktop = useMediaQuery("(min-width: 800px)");
   const chatBottomRef = useRef<null | HTMLDivElement>(null);
+  let lastSenderName: String = "";
 
   const handleSendMessage = () => {
     hmsActions.sendBroadcastMessage(message);
@@ -64,9 +65,11 @@ export default function ChatWidget() {
             paddingBottom={"1rem"}
             paddingRight={"0.5rem"}
           >
-            {allMessages.map((x) => (
-              <ChatMessage message={x} />
-            ))}
+            {allMessages.map((x) => {
+              let showName = !(x?.senderName === lastSenderName);
+              lastSenderName = x?.senderName || "";
+              return <ChatMessage message={x} showName={showName} />;
+            })}
             <Box ref={chatBottomRef} />
           </Stack>
           <Stack direction={"row"} marginTop={"auto !important"} width={"100%"}>
